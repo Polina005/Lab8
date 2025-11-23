@@ -1,339 +1,548 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ссылки задание 2</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Форма обратной связи</title>
     <style>
-        .custom-bg {
-            background-color: #fff0f5;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .custom-footer {
-            background-color: #ffb6c1;
-        }
-        .custom-card {
-            background-color: #fff0f5;
-            border: 1px solid #ffb6c1;
-        }
-        .table-custom th {
-            background-color: #fff0f5;
-            border-color: #ffb6c1;
-        }
-        .table-custom td {
-            border-color: #ffb6c1;
-        }
-        .nav-custom a {
+
+        body {
+            background: linear-gradient(135deg, white 0%, #ffafbd 400%);
             color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: black;
+            margin-bottom: 15px;
+            font-size: 2.2rem;
+            font-weight: 600;
+        }
+
+        .header p {
+            color: black;
+            font-size: 1.1rem;
+        }
+
+        .open-form-btn {
+            background: linear-gradient(45deg, #FFC0CB, #FFB6C1);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.4);
+            font-weight: 500;
+        }
+
+        .open-form-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 182, 193, 0.6);
+        }
+
+        .open-form-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            width: 95%;
+            max-width: 500px;
+            max-height: 95vh;
+            overflow-y: auto;
+            z-index: 1001;
+            display: none;
+            position: relative;
+        }
+
+        .popup-header {
+            background: linear-gradient(150deg,#FFB6C1 );
+            color: white;
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .popup-header h2 {
+            font-size: 22px;
+            font-weight: 500;
+        }
+
+        .close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .form-container {
+            padding: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #DB7093;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #FFB6C1;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #DB7093;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(219, 112, 147, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+
+        .checkbox-group input {
+            width: auto;
+            margin-right: 12px;
+            margin-top: 4px;
+        }
+
+        .checkbox-group label {
+            font-weight: normal;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .checkbox-group a {
+            color: #A9A9A9;
             text-decoration: none;
             font-weight: 500;
         }
-        .nav-custom a:hover {
-            color: #ff8da1;
-        }
-        .links-list a {
-            color: #ff8da1;
-            text-decoration: none;
-        }
-        .links-list a:hover {
-            color: #333;
+
+        .checkbox-group a:hover {
             text-decoration: underline;
         }
-        .link-image {
+
+        .submit-btn {
+            background: linear-gradient(45deg, #FFB6C1);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
             border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #FFB6C1;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status-message {
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+            font-weight: 500;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+                justify-content: flex-start;
+                padding-top: 40px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .popup {
+                width: 100%;
+                height: 100%;
+                max-height: 100vh;
+                border-radius: 0;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
         }
     </style>
 </head>
-<body class="bg-light">
-<!-- Шапка -->
-<header class="custom-bg py-3">
-    <div class="container">
-        <div class="row align-items-center">
-            <!-- Логотип -->
-            <div class="col-12 col-md-3 mb-3 mb-md-0">
-                <div class="собака">
-                    <img src="собака.jpg" alt="собака убежала" class="img-fluid rounded" style="max-width: 180px;">
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Форма обратной связи</h1>
+        <p>Нажмите на кнопку ниже, чтобы открыть форму обратной связи</p>
+    </div>
+    <button class="open-form-btn" id="openFormBtn">Оставить отзыв</button>
+</div>
+
+<div class="overlay" id="overlay">
+    <div class="popup" id="popup">
+        <div class="popup-header">
+            <h2>Форма обратной связи</h2>
+            <button class="close-btn" id="closeBtn">&times;</button>
+        </div>
+        <div class="form-container">
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label for="fullName">ФИО *</label>
+                    <input type="text" id="fullName" name="fullName" required>
                 </div>
-            </div>
-
-            <!-- Заголовок -->
-            <div class="col-12 col-md-3 text-center text-md-start mb-3 mb-md-0">
-                <h1 class="h4 mb-0">Лаб 4</h1>
-            </div>
-
-            <!-- Навигация -->
-            <div class="col-12 col-md-6">
-                <nav class="nav-custom d-flex flex-column flex-md-row gap-2 gap-md-4 justify-content-md-end">
-                    <a href="http://kubsu.ru" class="px-2 py-1">Главная</a>
-                    <a href="https://kubsu.ru/university" class="px-2 py-1">Об университете</a>
-                    <a href="https://kubsu.ru/ru/university/departments" class="px-2 py-1">Факультеты</a>
-                </nav>
-            </div>
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Телефон *</label>
+                    <input type="tel"
+                           id="phone"
+                           name="phone"
+                           placeholder="+79094514393"
+                           required>
+                    <small style="color: #666; font-size: 12px;">Введите номер в любом формате</small>
+                </div>
+                <div class="form-group">
+                    <label for="organization">Организация</label>
+                    <input type="text" id="organization" name="organization">
+                </div>
+                <div class="form-group">
+                    <label for="message">Сообщение *</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="privacyPolicy" name="privacyPolicy" required>
+                    <label for="privacyPolicy">Я согласен с <a href="#" target="_blank">политикой обработки персональных данных</a> *</label>
+                </div>
+                <button type="submit" class="submit-btn" id="submitBtn">Отправить</button>
+            </form>
+            <div class="status-message" id="statusMessage"></div>
         </div>
     </div>
-</header>
+</div>
 
-<!-- Основной контент -->
-<main class="py-4">
-    <div class="container">
-        <div class="row g-4">
-            <!-- Секция ссылок -->
-            <div class="col-12 col-lg-6 order-2 order-lg-1">
-                <section class="custom-card rounded p-4 h-100">
-                    <h2 class="h5 mb-3">Ссылки</h2>
-                    <ol class="links-list list-unstyled">
-                        <li class="mb-3">
-                            Абсолютная гиперссылка на главную страницу сайта kubsu.ru
-                            <a href="http://kubsu.ru" class="d-block mt-1">Ссылка</a>
-                        </li>
-                        <li class="mb-3">
-                            Абсолютная на главную сайта kubsu.ru в протоколе https
-                            <a href="https://kubsu.ru" class="d-block mt-1">Ссылка</a>
-                        </li>
-                        <li class="mb-3">
-                            <p class="mb-2">Ссылка-изображение</p>
-                            <a href="https://kubsu.ru">
-                                <img src="собака.jpg" alt="Собака улыбака" class="link-image img-fluid" style="max-width: 150px;">
-                            </a>
-                        </li>
-                        <li class="mb-3">
-                            Сокращенная ссылка на внутреннюю страницу
-                            <a href="/alk.html" class="d-block mt-1">Ссылка</a>
-                        </li>
-                        <li class="mb-3">
-                            Сокращенная ссылка на главную страницу
-                            <a href="/" class="d-block mt-1">Ссылка</a>
-                        </li>
-                        <li class="mb-3">
-                            <a href="#form" class="d-block">Ссылка на фрагмент текущей страницы (форма)</a>
-                        </li>
-                        <li class="mb-3">
-                            Ссылка с тремя параметрами в URL
-                            <a href="https://kubsu.ru/?faculty=rgf&area=op&group=13" class="d-block mt-1">Ссылка</a>
-                        </li>
-                        <li class="mb-3">
-                            Ссылка с параметром id в URL
-                            <a href="https://kubsu.ru/?id=660" class="d-block mt-1">Ссылка</a>
-                        </li>
-                        <li class="mb-3">
-                            Относительная ссылка в текущем каталоге
-                            <a href=".." class="d-block mt-1">Ссылка</a>
-                        </li>
-                        <li class="mb-3">
-                            Относительная ссылка в каталоге about
-                            <a href="/about" class="d-block mt-1">Ссылка</a>
-                        </li>
-                        <li class="mb-3">
-                            Относительная ссылка на уровень выше
-                            <a href="../.." class="d-block mt-1">Ссылка</a>
-                        </li>
-                        <li class="mb-3">
-                            Относительная ссылка на два уровня выше
-                            <a href="../../.." class="d-block mt-1">Ссылка</a>
-                        </li>
-                        <li class="mb-3">
-                            Контекстная ссылка в тексте
-                            Текст с <a href="#form">контекстной ссылкой</a> внутри.
-                        </li>
-                        <li class="mb-3">
-                            Ссылка на фрагмент стороннего сайта
-                            <a href="https://www.iana.org/help/example-domains#legalnotice" class="d-block mt-1">Ссылка</a>
-                        </li>
-                        <li class="mb-3">
-                            <p class="mb-2">Ссылка из областей картинки</p>
-                            <img src="po.png" alt="Картинка с разными областями" usemap="#po" class="img-fluid">
-                            <map name="po">
-                                <area shape="rect" coords="385,75,580,250" href="https://kubsu.ru/" alt="rect">
-                                <area shape="circle" coords="205,173,100" href="https://kubsu.ru/university" alt="circle">
-                            </map>
-                        </li>
-                        <li class="mb-3">
-                            Ссылка с пустым href
-                            <a href="" class="d-block mt-1">Cсылка</a>
-                        </li>
-                        <li class="mb-3">
-                            Ссылка без href
-                            <a class="d-block mt-1">Ссылка</a>
-                        </li>
-                        <li class="mb-3">
-                            Ссылка с запретом перехода для поисковиков
-                            <a href="https://kubsu.ru/no-follow" rel="nofollow" class="d-block mt-1">Ссылка</a>
-                        </li>
-                        <li class="mb-3">
-                            Ссылка с запретом индексации
-                            <a href="https://kubsu.ru/no-index" rel="noindex" class="d-block mt-1">Cсылка</a>
-                        </li>
-                        <li class="mb-3">
-                            <p class="mb-2">Нумерованный список с title</p>
-                            <ol class="sublist">
-                                <li><a href="https://kubsu.
-ru/" title="Официальный сайт КубГУ">Кубанский государственный университет</a></li>
-                                <li><a href="https://kubsu.ru/university" title="Информация об университете">Об университете</a></li>
-                                <li><a href="https://kubsu.ru/education" title="Образовательные программы">Образование</a></li>
-                            </ol>
-                        </li>
-                        <li class="mb-3">
-                            Ссылка на FTP с авторизацией
-                            <a href="ftp://student1:123@kubsu.ru/" class="d-block mt-1">FTP файл</a>
-                        </li>
-                    </ol>
-                </section>
-            </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Элементы DOM
+        const openFormBtn = document.getElementById('openFormBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const overlay = document.getElementById('overlay');
+        const popup = document.getElementById('popup');
+        const feedbackForm = document.getElementById('feedbackForm');
+        const statusMessage = document.getElementById('statusMessage');
+        const submitBtn = document.getElementById('submitBtn');
 
-            <!-- Секция таблицы -->
-            <div class="col-12 col-lg-6 order-1 order-lg-2">
-                <section class="custom-card rounded p-4 h-100">
-                    <h2 class="h5 mb-3">Таблица факультетов</h2>
-                    <div class="table-responsive">
-                        <table class="table table-custom table-hover">
-                            <thead>
-                            <tr>
-                                <th>Факультет</th>
-                                <th>Декан</th>
-                                <th>Количество студентов</th>
-                                <th>Аудитории</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>Математики и компьютерных наук</td>
-                                <td>Иванова А.И.</td>
-                                <td>1200</td>
-                                <td>101-210</td>
-                            </tr>
-                            <tr>
-                                <td>Филологический</td>
-                                <td>Петров М.С.</td>
-                                <td>1100</td>
-                                <td>301-415</td>
-                            </tr>
-                            <tr>
-                                <td>Исторический</td>
-                                <td>Сидоров В.П.</td>
-                                <td>800</td>
-                                <td>501-510</td>
-                            </tr>
-                            <tr>
-                                <td>Экономический</td>
-                                <td>Иванов Е.В.</td>
-                                <td>800</td>
-                                <td>201-250</td>
-                            </tr>
-                            <tr>
-                                <td>Юридический</td>
-                                <td>Сергеев Д.К.</td>
-                                <td>150</td>
-                                <td rowspan="2">40-43</td>
-                            </tr>
-                            <tr>
-                                <td>Кинологический</td>
-                                <td>Собачкина Г.А.</td>
-                                <td>1300</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-            </div>
-        </div>
+        // Ключ для localStorage
+        const STORAGE_KEY = 'feedbackFormData';
 
-        <!-- Форма обратной связи -->
-        <div class="row mt-4">
-            <div class="col-12">
-                <section id="form" class="custom-card rounded p-4">
-                    <h2 class="h5 mb-4">Форма обратной связи</h2>
-                    <form action="/" method="post" class="row g-3">
-                        <div class="col-12">
-                            <label class="form-label">ФИО:</label>
-                            <input type="text" name="name" class="form-control" placeholder="Попова Полина Евгеньевна" required>
-                        </div>
+        // URL для отправки формы - ЗАМЕНИТЕ НА ВАШ РЕАЛЬНЫЙ URL С FORMCARRY
+        const FORM_SUBMIT_URL = 'https://formcarry.com/s/10_lVmadCFv';
 
-                        <div class="col-12 col-md-6">
-                            <label class="form-label">Телефон:</label>
-                            <input type="tel" pattern="[\+]\d[0-9]{10}" name="tel" class="form-control" placeholder="+7 (909) 451-43-93" required>
-                        </div>
+        // Переменная для отслеживания состояния формы
+        let isFormOpen = false;
 
-                        <div class="col-12 col-md-6">
-                            <label class="form-label">Email:</label>
-                            <input type="email" name="email" class="form-control" placeholder="popova.p.2006@mail.ru" required>
-                        </div>
+        // Открытие формы
+        openFormBtn.addEventListener('click', openForm);
 
-                        <div class="col-12 col-md-6">
-                            <label class="form-label">День рождения:</label>
-                            <input type="date" name="birthday" class="form-control" value="2006-02-08" required>
-                        </div>
+        // Закрытие формы
+        closeBtn.addEventListener('click', closeForm);
+        overlay.addEventListener('click', function(e) {
+            // Закрываем только если кликнули именно на оверлей, а не на попап
+            if (e.target === overlay) {
+                closeForm();
+            }
+        });
 
-                        <div class="col-12 col-md-6">
-                            <label class="form-label">Пол:</label>
-                            <div class="mt-1">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" checked name="sex" value="Мужской">
-                                    <label class="form-check-label">Мужской</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="sex" value="Женский">
-                                    <label class="form-check-label">Женский</label>
-                                </div>
-                            </div>
-                        </div>
+        // Обработка нажатия кнопки "Назад" в браузере
+        window.addEventListener('popstate', function(event) {
+            if (isFormOpen) {
+                closeForm();
+            }
+        });
 
-                        <div class="col-12">
-                            <label class="form-label">Любимые языки программирования:</label>
-                            <select name="lang" class="form-select" multiple size="6" required>
-                                <option value="Pascal">Pascal</option>
-                                <option value="C">C</option>
-                                <option value="Cpp" selected>C++</option>
-                                <option value="JavaScript">JavaScript</option>
-                                <option value="PHP">PHP</option>
-                                <option value="Python" selected>Python</option>
-                                <option value="Java" selected>Java</option>
-                                <option value="Haskel">Haskel</option>
-                                <option value="Clojure">Clojure</option>
-                                <option value="Prolog">Prolog</option>
-                                <option value="Scala">Scala</option>
-                            </select>
-                        </div>
+        // Предотвращаем закрытие при клике внутри формы
+        popup.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
 
-                        <div class="col-12">
-                            <label class="form-label">Биография:</label>
-                            <textarea class="form-control" cols="50" rows="4" required></textarea>
-                        </div>
+        // Загрузка сохраненных данных при загрузке страницы
+        loadFormData();
 
-                        <div class="col-12">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="check-1" required>
-                                <label class="form-check-label">C контрактом ознакомлен(а)</label>
-                            </div>
-                        </div>
+        // Сохранение данных формы при изменении
+        feedbackForm.addEventListener('input', saveFormData);
 
-                        <div class="col-12">
-                            <button type="submit" class="btn text-dark" style="background-color: #ff8da1;">Сохранить</button>
-                        </div>
-                    </form>
-                </section>
-            </div>
-        </div>
+        // Отправка формы
+        feedbackForm.addEventListener('submit', submitForm);
 
-        <!-- Дополнительное изображение -->
-        <div class="row mt-4">
-            <div class="col-12 text-center">
-                <img src="собака.jpg" alt="error" class="img-fluid rounded" style="max-width: 300px;">
-            </div>
-        </div>
-    </div>
-</main>
+        function openForm() {
+            // Показываем попап и оверлей
+            overlay.style.display = 'flex';
+            popup.style.display = 'block';
+            isFormOpen = true;
 
-<!-- Подвал -->
-<footer class="custom-footer text-dark py-4 mt-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 text-center">
-                <p class="mb-0">&copy;2025 Попова Полина. Кубанский Государственный Университет</p>
-            </div>
-        </div>
-    </div>
-</footer>
+            // Добавляем запись в историю браузера
+            history.pushState({ formOpen: true }, '', '#feedback-form');
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            // Загружаем сохраненные данные
+            loadFormData();
+
+            // Фокусируемся на первом поле
+            setTimeout(() => {
+                document.getElementById('fullName').focus();
+            }, 100);
+        }
+
+        function closeForm() {
+            // Скрываем попап и оверлей
+            overlay.style.display = 'none';
+            popup.style.display = 'none';
+            isFormOpen = false;
+
+            // Возвращаемся к предыдущему состоянию URL
+            if (window.location.hash === '#feedback-form') {
+                history.back();
+            }
+        }
+
+        function saveFormData() {
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                organization: document.getElementById('organization').value,
+                message: document.getElementById('message').value,
+                privacyPolicy: document.getElementById('privacyPolicy').checked
+            };
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+        }
+
+        function loadFormData() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+
+                document.getElementById('fullName').value = formData.fullName || '';
+                document.getElementById('email').value = formData.email || '';
+                document.getElementById('phone').value = formData.phone || '';
+                document.getElementById('organization').value = formData.organization || '';
+                document.getElementById('message').value = formData.message || '';
+                document.getElementById('privacyPolicy').checked = formData.privacyPolicy || false;
+            }
+        }
+
+        function clearFormData() {
+            localStorage.removeItem(STORAGE_KEY);
+            feedbackForm.reset();
+        }
+
+        function showMessage(text, isSuccess) {
+            statusMessage.textContent = text;
+            statusMessage.className = isSuccess ? 'status-message success' : 'status-message error';
+            statusMessage.style.display = 'block';
+
+            // Прокручиваем к сообщению
+            statusMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            // Скрываем сообщение через 5 секунд
+            setTimeout(() => {
+                statusMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        async function submitForm(e) {
+            e.preventDefault();
+
+            console.log('=== НАЧАЛО ОТПРАВКИ ФОРМЫ ===');
+
+            // Проверяем валидность формы
+            if (!feedbackForm.checkValidity()) {
+                console.log('Форма невалидна, показываем ошибки');
+                feedbackForm.reportValidity();
+                return;
+            }
+
+            // Блокируем кнопку отправки
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Отправка...';
+
+            try {
+                // Собираем данные формы
+                const formData = new FormData(feedbackForm);
+
+                // Логируем данные формы
+                console.log('Данные формы для отправки:');
+                for (let [key, value] of formData.entries()) {
+                    console.log(`- ${key}: ${value}`);
+                }
+
+                console.log('Отправка на Formcarry...', FORM_SUBMIT_URL);
+
+                // РЕАЛЬНАЯ отправка на Formcarry
+                const response = await fetch(FORM_SUBMIT_URL, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                console.log('Статус ответа:', response.status, response.statusText);
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Успешный ответ от Formcarry:', result);
+                    showMessage('Сообщение успешно отправлено! Спасибо за ваше обращение.', true);
+                    clearFormData();
+                    setTimeout(closeForm, 2000);
+                } else {
+                    // Если ответ не OK, пробуем прочитать текст ошибки
+                    let errorText = '';
+                    try {
+                        errorText = await response.text();
+                    } catch (e) {
+                        errorText = 'Не удалось прочитать ответ сервера';
+                    }
+                    console.error('Ошибка сервера:', response.status, errorText);
+                    throw new Error(`Ошибка сервера: ${response.status} - ${errorText}`);
+                }
+
+            } catch (error) {
+                console.error('Ошибка при отправке формы:', error);
+
+                // Более информативное сообщение об ошибке
+                let errorMessage = 'Произошла ошибка при отправке формы. ';
+
+                if (error.message.includes('Failed to fetch')) {
+                    errorMessage += 'Проблема с подключением к интернету или сервер недоступен.';
+                } else if (error.message.includes('404')) {
+                    errorMessage += 'URL формы не найден. Проверьте правильность Formcarry URL.';
+                } else if (error.message.includes('429')) {
+                    errorMessage += 'Слишком много запросов. Попробуйте позже.';
+                } else {
+                    errorMessage += error.message;
+                }
+
+                showMessage(errorMessage, false);
+            } finally {
+                // Разблокируем кнопку отправки
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Отправить';
+                console.log('=== ЗАВЕРШЕНИЕ ОТПРАВКИ ФОРМЫ ===');
+            }
+        }
+
+        // Закрытие по ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && isFormOpen) {
+                closeForm();
+            }
+        });
+    });
+</script>
 </body>
 </html>
